@@ -4,9 +4,7 @@ package de.lmu.ifi.dbs.elki.math.statistics.distribution.estimator;
  This file is part of ELKI:
  Environment for Developing KDD-Applications Supported by Index-Structures
 
- Copyright (C) 2015
- Ludwig-Maximilians-Universität München
- Lehr- und Forschungseinheit für Datenbanksysteme
+ Copyright (C) 2016
  ELKI Development Team
 
  This program is free software: you can redistribute it and/or modify
@@ -22,47 +20,50 @@ package de.lmu.ifi.dbs.elki.math.statistics.distribution.estimator;
  You should have received a copy of the GNU Affero General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import de.lmu.ifi.dbs.elki.math.MeanVariance;
+
+import de.lmu.ifi.dbs.elki.math.StatisticalMoments;
 import de.lmu.ifi.dbs.elki.math.statistics.distribution.LogGammaDistribution;
 import de.lmu.ifi.dbs.elki.utilities.optionhandling.AbstractParameterizer;
 
 /**
- * Simple parameter estimation for the Gamma distribution.
+ * Simple parameter estimation for the LogGamma distribution.
  * 
- * This is a very naive estimation, based on the mean and variance of the log
- * transformed values.
+ * This is a very naive estimation, based on the mean and variance only,
+ * sometimes referred to as the "Method of Moments" (MOM).
  * 
+ * This estimator based on the {@link GammaMOMEstimator} and a simple log data
+ * transformation.
+ *
  * @author Erich Schubert
- * @since 0.6.0
  * 
  * @apiviz.has LogGammaDistribution - - estimates
  */
-public class LogGammaLogMOMEstimator extends AbstractLogMeanVarianceEstimator<LogGammaDistribution> {
+public class LogGammaLogMOMEstimator extends AbstractLogMOMEstimator<LogGammaDistribution> {
   /**
    * Static estimation using just the mean and variance.
    */
   public static final LogGammaLogMOMEstimator STATIC = new LogGammaLogMOMEstimator();
 
   /**
-   * Private constructor: use static instance.
+   * Private constructor.
    */
   private LogGammaLogMOMEstimator() {
     // Do not instantiate - use static class
   }
 
   @Override
-  public LogGammaDistribution estimateFromLogMeanVariance(MeanVariance mv, double shift) {
+  public LogGammaDistribution estimateFromLogStatisticalMoments(StatisticalMoments mv, double shift) {
     final double mu = mv.getMean();
     final double var = mv.getSampleVariance();
-    if (mu < Double.MIN_NORMAL || var < Double.MIN_NORMAL) {
+    if(mu < Double.MIN_NORMAL || var < Double.MIN_NORMAL) {
       throw new ArithmeticException("Cannot estimate Gamma parameters on a distribution with zero mean or variance: " + mv.toString());
     }
     final double theta = mu / var;
     final double k = mu * theta;
-    if (!(k > 0.) || !(theta > 0.)) {
-      throw new ArithmeticException("LogGamma estimation produced non-positive parameter values: k=" + k + " theta=" + theta);
+    if(!(k > 0.) || !(theta > 0.)) {
+      throw new ArithmeticException("Gamma estimation produced non-positive parameter values: k=" + k + " theta=" + theta);
     }
-    return new LogGammaDistribution(k, theta, shift - 1);
+    return new LogGammaDistribution(k, theta, shift);
   }
 
   @Override

@@ -40,7 +40,6 @@ import de.lmu.ifi.dbs.elki.math.statistics.distribution.estimator.ExponentialMAD
 import de.lmu.ifi.dbs.elki.math.statistics.distribution.estimator.ExponentialMOMEstimator;
 import de.lmu.ifi.dbs.elki.math.statistics.distribution.estimator.ExponentialMedianEstimator;
 import de.lmu.ifi.dbs.elki.math.statistics.distribution.estimator.GammaLMMEstimator;
-import de.lmu.ifi.dbs.elki.math.statistics.distribution.estimator.GammaMADEstimator;
 import de.lmu.ifi.dbs.elki.math.statistics.distribution.estimator.GammaMOMEstimator;
 import de.lmu.ifi.dbs.elki.math.statistics.distribution.estimator.GeneralizedExtremeValueLMMEstimator;
 import de.lmu.ifi.dbs.elki.math.statistics.distribution.estimator.GeneralizedLogisticAlternateLMMEstimator;
@@ -51,7 +50,6 @@ import de.lmu.ifi.dbs.elki.math.statistics.distribution.estimator.InverseGaussia
 import de.lmu.ifi.dbs.elki.math.statistics.distribution.estimator.LMMDistributionEstimator;
 import de.lmu.ifi.dbs.elki.math.statistics.distribution.estimator.LaplaceLMMEstimator;
 import de.lmu.ifi.dbs.elki.math.statistics.distribution.estimator.LaplaceMADEstimator;
-import de.lmu.ifi.dbs.elki.math.statistics.distribution.estimator.LogGammaLogMADEstimator;
 import de.lmu.ifi.dbs.elki.math.statistics.distribution.estimator.LogGammaLogMOMEstimator;
 import de.lmu.ifi.dbs.elki.math.statistics.distribution.estimator.LogLogisticMADEstimator;
 import de.lmu.ifi.dbs.elki.math.statistics.distribution.estimator.LogMADDistributionEstimator;
@@ -142,9 +140,8 @@ public class BestFitEstimator implements DistributionEstimator<Distribution> {
     momests.add(InverseGaussianMOMEstimator.STATIC);
     momests.add(ExponentialMOMEstimator.STATIC);
     momests.add(EMGOlivierNorbergEstimator.STATIC);
-    madests = new ArrayList<>(11);
+    madests = new ArrayList<>(10);
     madests.add(NormalMADEstimator.STATIC);
-    madests.add(GammaMADEstimator.STATIC);
     madests.add(ExponentialMADEstimator.STATIC);
     madests.add(ExponentialMedianEstimator.STATIC);
     madests.add(LaplaceMADEstimator.STATIC);
@@ -175,7 +172,6 @@ public class BestFitEstimator implements DistributionEstimator<Distribution> {
     logmomests.add(LogGammaLogMOMEstimator.STATIC);
     logmadests = new ArrayList<>(3);
     logmadests.add(LogNormalLogMADEstimator.STATIC);
-    logmadests.add(LogGammaLogMADEstimator.STATIC);
     logmadests.add(WeibullLogMADEstimator.STATIC);
   }
 

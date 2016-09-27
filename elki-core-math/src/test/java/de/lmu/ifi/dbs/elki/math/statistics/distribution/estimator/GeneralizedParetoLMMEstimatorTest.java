@@ -4,7 +4,7 @@ package de.lmu.ifi.dbs.elki.math.statistics.distribution.estimator;
  This file is part of ELKI:
  Environment for Developing KDD-Applications Supported by Index-Structures
 
- Copyright (C) 2015
+ Copyright (C) 2016
  Ludwig-Maximilians-Universität München
  Lehr- und Forschungseinheit für Datenbanksysteme
  ELKI Development Team
@@ -23,24 +23,25 @@ package de.lmu.ifi.dbs.elki.math.statistics.distribution.estimator;
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import de.lmu.ifi.dbs.elki.math.statistics.distribution.Distribution;
+import org.junit.Test;
+
+import de.lmu.ifi.dbs.elki.math.statistics.distribution.GeneralizedParetoDistribution;
+import de.lmu.ifi.dbs.elki.utilities.datastructures.arraylike.DoubleArrayAdapter;
 
 /**
- * Distribuition estimators that use the method of moments (MOM) in
- * exponentiated data.
+ * Regression test the estimation for the GeneralizedParetoLMM distribution.
  * 
  * @author Erich Schubert
- * @since 0.5.0
- * 
- * @param <D> Distribution estimated.
  */
-public interface ExpMADDistributionEstimator<D extends Distribution> extends DistributionEstimator<D> {
-  /**
-   * General form of the parameter estimation
-   * 
-   * @param median Median lof exp values.
-   * @param mad Median absolute deviation from median (in expspace).
-   * @return Estimated distribution
-   */
-  D estimateFromExpMedianMAD(double median, double mad);
+public class GeneralizedParetoLMMEstimatorTest extends AbstractDistributionEstimatorTest {
+  @Test
+  public void testEstimator() {
+    final GeneralizedParetoLMMEstimator est = GeneralizedParetoLMMEstimator.STATIC;
+    load("gpd.ascii.gz");
+    double[] data = this.data.get("random_01_05_01");
+    GeneralizedParetoDistribution dist = est.estimate(data, DoubleArrayAdapter.STATIC);
+    assertStat("mu", dist.getMu(), 0.1, 0.009242125289449316);
+    assertStat("sigma", dist.getSigma(), 0.5, -0.06531958035222124);
+    assertStat("xi", dist.getXi(), 0.1, 0.12674078147717688);
+  }
 }
